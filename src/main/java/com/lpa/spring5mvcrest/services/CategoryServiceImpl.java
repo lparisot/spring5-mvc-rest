@@ -5,6 +5,7 @@ import com.lpa.spring5mvcrest.api.v1.model.CategoryDTO;
 import com.lpa.spring5mvcrest.repositories.CategoryRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
@@ -17,11 +18,16 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDTO> getAllCategories() {
-        return null;
+        return categoryRepository
+                .findAll()
+                .stream()
+                .map(categoryMapper::categoryToCategoryDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
     public CategoryDTO getCategoryByName(String name) {
-        return null;
+        return categoryMapper
+                .categoryToCategoryDTO(categoryRepository.findByName(name));
     }
 }
