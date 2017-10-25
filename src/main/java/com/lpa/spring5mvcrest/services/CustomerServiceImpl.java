@@ -52,4 +52,9 @@ public class CustomerServiceImpl implements CustomerService {
 
         return returnDTO;
     }
+
+    @Override
+    public CustomerDTO saveCustomerByDTO(Long id, CustomerDTO customerDTO) {
+        return null;
+    }
 }

@@ -88,4 +88,25 @@ public class CustomerServiceTest {
         assertEquals(CUSTOMER_URL + ID, savedDTO.getCustomerUrl());
     }
 
+    @Test
+    public void saveCustomerByDTO() throws Exception {
+        //given
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setFirstname(FIRSTNAME);
+        customerDTO.setLastname(LASTNAME);
+
+        Customer savedCustomer = new Customer();
+        savedCustomer.setFirstname(customerDTO.getFirstname());
+        savedCustomer.setLastname(customerDTO.getLastname());
+        savedCustomer.setId(ID);
+
+        when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+
+        //when
+        CustomerDTO savedDTO = customerService.saveCustomerByDTO(ID, customerDTO);
+
+        //then
+        assertEquals(customerDTO.getFirstname(), savedCustomer.getFirstname());
+        assertEquals(CUSTOMER_URL + ID, savedDTO.getCustomerUrl());
+    }
 }
