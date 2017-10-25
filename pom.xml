@@ -87,7 +87,14 @@
                         <format>html</format>
                         <format>xml</format>
                     </formats>
-					<check/>
+					<check>
+						<branchRate>85</branchRate>
+						<lineRate>85</lineRate>
+						<totalBranchRate>85</totalBranchRate>
+						<totalLineRate>85</totalLineRate>
+						<packageBranchRate>85</packageBranchRate>
+						<packageLineRate>85</packageLineRate>
+					</check>
                 </configuration>
 				<executions>
 					<execution>
