@@ -16,15 +16,17 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class CustomerControllerTest {
+    public static final Long ID = 1L;
     public static final String FIRSTNAME = "John";
     public static final String LASTNAME = "Doe";
+    public static final String CUSTOMER_URL = "/api/v1/customers/";
 
     @Mock
     private CustomerService customerService;
@@ -43,14 +45,14 @@ public class CustomerControllerTest {
     public void testListCustomers() throws Exception {
         //given
         CustomerDTO customer1 = new CustomerDTO();
-        customer1.setId(1L);
         customer1.setFirstname("A");
         customer1.setLastname("A");
+        customer1.setCustomerUrl(CUSTOMER_URL + "1");
 
         CustomerDTO customer2 = new CustomerDTO();
-        customer2.setId(2L);
         customer2.setFirstname("B");
         customer2.setLastname("B");
+        customer2.setCustomerUrl(CUSTOMER_URL + "2");
 
         List<CustomerDTO> customers = Arrays.asList(customer1, customer2);
 
@@ -58,22 +60,25 @@ public class CustomerControllerTest {
         when(customerService.getAllCustomers()).thenReturn(customers);
 
         //then
-        mockMvc.perform(get("/api/v1/customers/").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(CUSTOMER_URL).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.customers", hasSize(2)));
     }
 
     @Test
-    public void testGetByNameCategories() throws Exception {
+    public void testGetCustomerById() throws Exception {
+        //given
         CustomerDTO customer = new CustomerDTO();
-        customer.setId(1L);
         customer.setFirstname(FIRSTNAME);
         customer.setLastname(LASTNAME);
+        customer.setCustomerUrl(CUSTOMER_URL + ID);
 
-        when(customerService.getCustomerByLastName(anyString())).thenReturn(customer);
+        when(customerService.getCustomerById(anyLong())).thenReturn(customer);
 
-        mockMvc.perform(get("/api/v1/customers/" + LASTNAME).contentType(MediaType.APPLICATION_JSON))
+        //when
+        mockMvc.perform(get(CUSTOMER_URL + ID).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.lastname", equalTo(LASTNAME)));
+                .andExpect(jsonPath("$.lastname", equalTo(LASTNAME)))
+                .andExpect(jsonPath("$.customerUrl", equalTo(CUSTOMER_URL + ID)));
     }
 }

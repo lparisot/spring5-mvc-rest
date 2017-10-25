@@ -11,7 +11,7 @@ public class CustomerMapperTest {
     public static final String FIRSTNAME = "John";
     public static final String LASTNAME = "Doe";
     public static final Long ID = 1L;
-    CustomerMapper customerMapper = CustomerMapper.INSTANCE;
+    private CustomerMapper customerMapper = CustomerMapper.INSTANCE;
 
     @Before
     public void setUp() throws Exception {
@@ -29,7 +29,6 @@ public class CustomerMapperTest {
         CustomerDTO customerDTO = customerMapper.customerToCustomerDTO(customer);
 
         //then
-        assertEquals(ID, customerDTO.getId());
         assertEquals(FIRSTNAME, customerDTO.getFirstname());
         assertEquals(LASTNAME, customerDTO.getLastname());
     }

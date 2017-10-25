@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 public class CustomerServiceTest {
@@ -47,20 +47,19 @@ public class CustomerServiceTest {
     }
 
     @Test
-    public void getCustomerByName() throws Exception {
+    public void getCustomerById() throws Exception {
         //given
         Customer customer = new Customer();
         customer.setId(ID);
         customer.setFirstname(FIRSTNAME);
         customer.setLastname(LASTNAME);
 
-        when(customerRepository.findByLastname(anyString())).thenReturn(customer);
+        when(customerRepository.findById(anyLong())).thenReturn(java.util.Optional.ofNullable(customer));
 
         //when
-        CustomerDTO customerDTO = customerService.getCustomerByLastName(LASTNAME);
+        CustomerDTO customerDTO = customerService.getCustomerById(ID);
 
         //then
-        assertEquals(ID, customerDTO.getId());
         assertEquals(FIRSTNAME, customerDTO.getFirstname());
         assertEquals(LASTNAME, customerDTO.getLastname());
     }
