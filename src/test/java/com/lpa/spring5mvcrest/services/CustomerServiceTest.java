@@ -44,7 +44,6 @@ public class CustomerServiceTest {
 
         //then
         assertEquals(3, customerDTOS.size());
-
     }
 
     @Test
@@ -55,7 +54,7 @@ public class CustomerServiceTest {
         customer.setFirstname(FIRSTNAME);
         customer.setLastname(LASTNAME);
 
-        when(customerRepository.findByLastName(anyString())).thenReturn(customer);
+        when(customerRepository.findByLastname(anyString())).thenReturn(customer);
 
         //when
         CustomerDTO customerDTO = customerService.getCustomerByLastName(LASTNAME);

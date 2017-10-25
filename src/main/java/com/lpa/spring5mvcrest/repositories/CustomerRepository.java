@@ -4,5 +4,5 @@ import com.lpa.spring5mvcrest.domain.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
-    Customer findByLastName(String name);
+    Customer findByLastname(String name);
 }
