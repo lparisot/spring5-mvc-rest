@@ -19,6 +19,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -79,7 +80,7 @@ public class CustomerControllerTest extends AbstractRestControllerTest {
         mockMvc.perform(get(CUSTOMER_URL + ID).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.lastname", equalTo(LASTNAME)))
-                .andExpect(jsonPath("$.customerUrl", equalTo(CUSTOMER_URL + ID)));
+                .andExpect(jsonPath("$.customer_url", equalTo(CUSTOMER_URL + ID)));
     }
 
     @Test
@@ -98,9 +99,9 @@ public class CustomerControllerTest extends AbstractRestControllerTest {
         when(customerService.createNewCustomer(customer)).thenReturn(returnDTO);
 
         //when/then
-        mockMvc.perform(get(CUSTOMER_URL).contentType(MediaType.APPLICATION_JSON).content(asJsonString(customer)))
+        mockMvc.perform(post(CUSTOMER_URL).contentType(MediaType.APPLICATION_JSON).content(asJsonString(customer)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.firstname", equalTo(FIRSTNAME)))
-                .andExpect(jsonPath("$.customerUrl", equalTo(CUSTOMER_URL + ID)));
+                .andExpect(jsonPath("$.customer_url", equalTo(CUSTOMER_URL + ID)));
     }
 }
