@@ -2,6 +2,7 @@ package com.lpa.spring5mvcrest.services;
 
 import com.lpa.spring5mvcrest.api.v1.mapper.CustomerMapper;
 import com.lpa.spring5mvcrest.api.v1.model.CustomerDTO;
+import com.lpa.spring5mvcrest.domain.Customer;
 import com.lpa.spring5mvcrest.repositories.CustomerRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerMapper customerMapper;
     private final CustomerRepository customerRepository;
+    private final String CUSTOMER_URL = "/api/v1/customers/";
 
     public CustomerServiceImpl(CustomerMapper customerMapper, CustomerRepository customerRepository) {
         this.customerMapper = customerMapper;
@@ -25,7 +27,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .stream()
                 .map(customer -> {
                     CustomerDTO customerDTO = customerMapper.customerToCustomerDTO(customer);
-                    customerDTO.setCustomerUrl("/api/v1/customers/" + customer.getId());
+                    customerDTO.setCustomerUrl(CUSTOMER_URL + customer.getId());
                     return customerDTO;
                 })
                 .collect(Collectors.toList());
@@ -39,7 +41,15 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDTO createNewCustomer(CustomerDTO customer) {
-        return null;
+    public CustomerDTO createNewCustomer(CustomerDTO customerDTO) {
+        Customer customer = customerMapper.customerDTOToCustomer(customerDTO);
+
+        Customer savedCustomer = customerRepository.save(customer);
+
+        CustomerDTO returnDTO = customerMapper.customerToCustomerDTO(savedCustomer);
+
+        returnDTO.setCustomerUrl(CUSTOMER_URL + savedCustomer.getId());
+
+        return returnDTO;
     }
 }
