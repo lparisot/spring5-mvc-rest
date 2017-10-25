@@ -20,7 +20,7 @@ public class CustomerController {
     }
 
     @GetMapping
-    public ResponseEntity<CustomerListDTO> getAllCategories() {
+    public ResponseEntity<CustomerListDTO> getAllCustomers() {
         return new ResponseEntity<CustomerListDTO>(
                 new CustomerListDTO(customerService.getAllCustomers()),
                 HttpStatus.OK
@@ -28,7 +28,7 @@ public class CustomerController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<CustomerDTO> getCategoryById(@PathVariable Long id) {
+    public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable Long id) {
         return new ResponseEntity<CustomerDTO>(
                 customerService.getCustomerById(id),
                 HttpStatus.OK
