@@ -1,4 +1,4 @@
-package com.lpa.spring5mvcrest.controller.v1;
+package com.lpa.spring5mvcrest.controllers.v1;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

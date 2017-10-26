@@ -2,7 +2,7 @@ package com.lpa.spring5mvcrest.services;
 
 import com.lpa.spring5mvcrest.api.v1.mapper.CustomerMapper;
 import com.lpa.spring5mvcrest.api.v1.model.CustomerDTO;
-import com.lpa.spring5mvcrest.controller.v1.CustomerController;
+import com.lpa.spring5mvcrest.controllers.v1.CustomerController;
 import com.lpa.spring5mvcrest.domain.Customer;
 import com.lpa.spring5mvcrest.repositories.CustomerRepository;
 import org.springframework.stereotype.Service;
