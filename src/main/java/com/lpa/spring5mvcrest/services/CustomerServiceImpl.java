@@ -80,7 +80,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void deleteCustomerById(long id) {
-
+        customerRepository.deleteById(id);
     }
 
     private CustomerDTO saveCustomerAndReturnDTO(Customer customer) {
