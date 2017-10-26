@@ -8,6 +8,7 @@ import com.lpa.spring5mvcrest.repositories.CustomerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,7 +42,7 @@ public class CustomerServiceImpl implements CustomerService {
                     customerDTO.setCustomerUrl(getCustomerUrl(id));
                     return customerDTO;
                 })
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
@@ -75,12 +76,18 @@ public class CustomerServiceImpl implements CustomerService {
 
                     return returnDTO;
                 })
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
     public void deleteCustomerById(long id) {
-        customerRepository.deleteById(id);
+        Optional<Customer> customer = customerRepository.findById(id);
+        if(customer.isPresent()) {
+            customerRepository.deleteById(id);
+        }
+        else {
+            throw new ResourceNotFoundException();
+        }
     }
 
     private CustomerDTO saveCustomerAndReturnDTO(Customer customer) {

@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.Arrays;
 import java.util.List;
