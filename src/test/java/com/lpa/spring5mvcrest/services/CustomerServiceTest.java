@@ -2,6 +2,7 @@ package com.lpa.spring5mvcrest.services;
 
 import com.lpa.spring5mvcrest.api.v1.mapper.CustomerMapper;
 import com.lpa.spring5mvcrest.api.v1.model.CustomerDTO;
+import com.lpa.spring5mvcrest.controller.v1.CustomerController;
 import com.lpa.spring5mvcrest.domain.Customer;
 import com.lpa.spring5mvcrest.repositories.CustomerRepository;
 import org.junit.Before;
@@ -23,11 +24,14 @@ public class CustomerServiceTest {
     public static final Long ID = 1L;
     public static final String FIRSTNAME = "John";
     public static final String LASTNAME = "Doe";
-    public static final String CUSTOMER_URL = "/api/v1/customers/";
 
     private CustomerService customerService;
     @Mock
     private CustomerRepository customerRepository;
+
+    private String getCustomerUrl() {
+        return CustomerController.BASE_URL + "/";
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -39,7 +43,9 @@ public class CustomerServiceTest {
     @Test
     public void getAllCustomers() throws Exception {
         //given
-        List<Customer> customers = Arrays.asList(new Customer(), new Customer(), new Customer());
+        Customer customer = new Customer();
+        customer.setId(ID);
+        List<Customer> customers = Arrays.asList(customer, customer, customer);
 
         when(customerRepository.findAll()).thenReturn(customers);
 
@@ -87,7 +93,7 @@ public class CustomerServiceTest {
 
         //then
         assertEquals(customerDTO.getFirstname(), savedCustomer.getFirstname());
-        assertEquals(CUSTOMER_URL + ID, savedDTO.getCustomerUrl());
+        assertEquals(getCustomerUrl() + ID, savedDTO.getCustomerUrl());
     }
 
     @Test
@@ -109,7 +115,7 @@ public class CustomerServiceTest {
 
         //then
         assertEquals(customerDTO.getFirstname(), savedCustomer.getFirstname());
-        assertEquals(CUSTOMER_URL + ID, savedDTO.getCustomerUrl());
+        assertEquals(getCustomerUrl() + ID, savedDTO.getCustomerUrl());
     }
 
     @Test
@@ -136,7 +142,7 @@ public class CustomerServiceTest {
 
         //then
         assertEquals(customerDTO.getFirstname(), patchedCustomer.getFirstname());
-        assertEquals(CUSTOMER_URL + ID, savedDTO.getCustomerUrl());
+        assertEquals(getCustomerUrl() + ID, savedDTO.getCustomerUrl());
     }
 
     @Test
@@ -163,7 +169,7 @@ public class CustomerServiceTest {
 
         //then
         assertEquals(customerDTO.getLastname(), patchedCustomer.getLastname());
-        assertEquals(CUSTOMER_URL + ID, savedDTO.getCustomerUrl());
+        assertEquals(getCustomerUrl() + ID, savedDTO.getCustomerUrl());
     }
 
     @Test

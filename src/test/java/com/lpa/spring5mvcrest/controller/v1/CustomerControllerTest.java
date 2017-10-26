@@ -28,13 +28,16 @@ public class CustomerControllerTest extends AbstractRestControllerTest {
     public static final Long ID = 1L;
     public static final String FIRSTNAME = "John";
     public static final String LASTNAME = "Doe";
-    public static final String CUSTOMER_URL = "/api/v1/customers/";
 
     @Mock
     private CustomerService customerService;
     @InjectMocks
     private CustomerController customerController;
     private MockMvc mockMvc;
+
+    private String getCustomerUrl() {
+        return CustomerController.BASE_URL + "/";
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -49,12 +52,12 @@ public class CustomerControllerTest extends AbstractRestControllerTest {
         CustomerDTO customer1 = new CustomerDTO();
         customer1.setFirstname("A");
         customer1.setLastname("A");
-        customer1.setCustomerUrl(CUSTOMER_URL + "1");
+        customer1.setCustomerUrl(getCustomerUrl() + "1");
 
         CustomerDTO customer2 = new CustomerDTO();
         customer2.setFirstname("B");
         customer2.setLastname("B");
-        customer2.setCustomerUrl(CUSTOMER_URL + "2");
+        customer2.setCustomerUrl(getCustomerUrl() + "2");
 
         List<CustomerDTO> customers = Arrays.asList(customer1, customer2);
 
@@ -62,7 +65,7 @@ public class CustomerControllerTest extends AbstractRestControllerTest {
         when(customerService.getAllCustomers()).thenReturn(customers);
 
         //then
-        mockMvc.perform(get(CUSTOMER_URL).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(getCustomerUrl()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.customers", hasSize(2)));
     }
@@ -73,15 +76,15 @@ public class CustomerControllerTest extends AbstractRestControllerTest {
         CustomerDTO customer = new CustomerDTO();
         customer.setFirstname(FIRSTNAME);
         customer.setLastname(LASTNAME);
-        customer.setCustomerUrl(CUSTOMER_URL + ID);
+        customer.setCustomerUrl(getCustomerUrl() + ID);
 
         when(customerService.getCustomerById(anyLong())).thenReturn(customer);
 
         //when
-        mockMvc.perform(get(CUSTOMER_URL + ID).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(getCustomerUrl() + ID).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.lastname", equalTo(LASTNAME)))
-                .andExpect(jsonPath("$.customer_url", equalTo(CUSTOMER_URL + ID)));
+                .andExpect(jsonPath("$.customer_url", equalTo(getCustomerUrl() + ID)));
     }
 
     @Test
@@ -90,7 +93,7 @@ public class CustomerControllerTest extends AbstractRestControllerTest {
         CustomerDTO customer = new CustomerDTO();
         customer.setFirstname(FIRSTNAME);
         customer.setLastname(LASTNAME);
-        customer.setCustomerUrl(CUSTOMER_URL + ID);
+        customer.setCustomerUrl(getCustomerUrl() + ID);
 
         CustomerDTO returnDTO = new CustomerDTO();
         returnDTO.setFirstname(customer.getFirstname());
@@ -100,10 +103,10 @@ public class CustomerControllerTest extends AbstractRestControllerTest {
         when(customerService.createNewCustomer(customer)).thenReturn(returnDTO);
 
         //when/then
-        mockMvc.perform(post(CUSTOMER_URL).contentType(MediaType.APPLICATION_JSON).content(asJsonString(customer)))
+        mockMvc.perform(post(getCustomerUrl()).contentType(MediaType.APPLICATION_JSON).content(asJsonString(customer)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.firstname", equalTo(FIRSTNAME)))
-                .andExpect(jsonPath("$.customer_url", equalTo(CUSTOMER_URL + ID)));
+                .andExpect(jsonPath("$.customer_url", equalTo(getCustomerUrl() + ID)));
     }
 
     @Test
@@ -112,7 +115,7 @@ public class CustomerControllerTest extends AbstractRestControllerTest {
         CustomerDTO customer = new CustomerDTO();
         customer.setFirstname(FIRSTNAME);
         customer.setLastname(LASTNAME);
-        customer.setCustomerUrl(CUSTOMER_URL + ID);
+        customer.setCustomerUrl(getCustomerUrl() + ID);
 
         CustomerDTO returnDTO = new CustomerDTO();
         returnDTO.setFirstname(customer.getFirstname());
@@ -122,11 +125,11 @@ public class CustomerControllerTest extends AbstractRestControllerTest {
         when(customerService.saveCustomerByDTO(anyLong(), any(CustomerDTO.class))).thenReturn(returnDTO);
 
         //when/then
-        mockMvc.perform(put(CUSTOMER_URL + ID).contentType(MediaType.APPLICATION_JSON).content(asJsonString(customer)))
+        mockMvc.perform(put(getCustomerUrl() + ID).contentType(MediaType.APPLICATION_JSON).content(asJsonString(customer)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstname", equalTo(FIRSTNAME)))
                 .andExpect(jsonPath("$.lastname", equalTo(LASTNAME)))
-                .andExpect(jsonPath("$.customer_url", equalTo(CUSTOMER_URL + ID)));
+                .andExpect(jsonPath("$.customer_url", equalTo(getCustomerUrl() + ID)));
     }
 
     @Test
@@ -138,21 +141,21 @@ public class CustomerControllerTest extends AbstractRestControllerTest {
         CustomerDTO returnDTO = new CustomerDTO();
         returnDTO.setFirstname(customer.getFirstname());
         returnDTO.setLastname(LASTNAME);
-        returnDTO.setCustomerUrl(CUSTOMER_URL + ID);
+        returnDTO.setCustomerUrl(getCustomerUrl() + ID);
 
         when(customerService.patchCustomer(anyLong(), any(CustomerDTO.class))).thenReturn(returnDTO);
 
         //when/then
-        mockMvc.perform(patch(CUSTOMER_URL + ID).contentType(MediaType.APPLICATION_JSON).content(asJsonString(customer)))
+        mockMvc.perform(patch(getCustomerUrl() + ID).contentType(MediaType.APPLICATION_JSON).content(asJsonString(customer)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstname", equalTo(FIRSTNAME)))
                 .andExpect(jsonPath("$.lastname", equalTo(LASTNAME)))
-                .andExpect(jsonPath("$.customer_url", equalTo(CUSTOMER_URL + ID)));
+                .andExpect(jsonPath("$.customer_url", equalTo(getCustomerUrl() + ID)));
     }
 
     @Test
     public void deleteCustomer() throws Exception {
-        mockMvc.perform(delete(CUSTOMER_URL + ID).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(delete(getCustomerUrl() + ID).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
         verify(customerService).deleteCustomerById(anyLong());
