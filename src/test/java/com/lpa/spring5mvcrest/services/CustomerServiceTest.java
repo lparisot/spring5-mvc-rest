@@ -175,8 +175,20 @@ public class CustomerServiceTest {
 
     @Test
     public void deleteCustomerById() throws Exception {
-        customerRepository.deleteById(ID);
+        Customer customer = new Customer();
+        customer.setFirstname(FIRSTNAME);
+        customer.setLastname(LASTNAME);
+        customer.setId(ID);
+
+        when(customerRepository.findById(anyLong())).thenReturn(java.util.Optional.ofNullable(customer));
+
+        customerService.deleteCustomerById(ID);
 
         verify(customerRepository, times(1)).deleteById(anyLong());
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void deleteCustomerByIdNotFound() throws Exception {
+        customerService.deleteCustomerById(ID);
     }
 }
