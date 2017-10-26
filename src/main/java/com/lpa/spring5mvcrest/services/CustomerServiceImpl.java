@@ -57,6 +57,11 @@ public class CustomerServiceImpl implements CustomerService {
         return saveCustomerAndReturnDTO(customer);
     }
 
+    @Override
+    public CustomerDTO patchCustomer(long id, CustomerDTO customerDTO) {
+        return null;
+    }
+
     private CustomerDTO saveCustomerAndReturnDTO(Customer customer) {
         Customer savedCustomer = customerRepository.save(customer);
 
