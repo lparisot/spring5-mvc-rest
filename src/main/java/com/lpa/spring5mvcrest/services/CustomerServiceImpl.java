@@ -37,6 +37,10 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDTO getCustomerById(Long id) {
         return customerRepository.findById(id)
                 .map(customerMapper::customerToCustomerDTO)
+                .map(customerDTO -> {
+                    customerDTO.setCustomerUrl(CUSTOMER_URL + id);
+                    return customerDTO;
+                })
                 .orElseThrow(RuntimeException::new);
     }
 
