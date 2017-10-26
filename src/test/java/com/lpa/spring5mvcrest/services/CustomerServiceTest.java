@@ -111,7 +111,7 @@ public class CustomerServiceTest {
     }
 
     @Test
-    public void patchCustomerByDTO() throws Exception {
+    public void patchFirstNameCustomerByDTO() throws Exception {
         //given
         Customer originalCustomer = new Customer();
         originalCustomer.setFirstname(FIRSTNAME);
@@ -119,7 +119,7 @@ public class CustomerServiceTest {
         originalCustomer.setId(ID);
 
         CustomerDTO customerDTO = new CustomerDTO();
-        customerDTO.setFirstname("Mike");
+        customerDTO.setFirstname("New First name");
 
         Customer patchedCustomer = new Customer();
         patchedCustomer.setFirstname(customerDTO.getFirstname());
@@ -134,6 +134,33 @@ public class CustomerServiceTest {
 
         //then
         assertEquals(customerDTO.getFirstname(), patchedCustomer.getFirstname());
+        assertEquals(CUSTOMER_URL + ID, savedDTO.getCustomerUrl());
+    }
+
+    @Test
+    public void patchLastNameCustomerByDTO() throws Exception {
+        //given
+        Customer originalCustomer = new Customer();
+        originalCustomer.setFirstname(FIRSTNAME);
+        originalCustomer.setLastname(LASTNAME);
+        originalCustomer.setId(ID);
+
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setLastname("New Last name");
+
+        Customer patchedCustomer = new Customer();
+        patchedCustomer.setFirstname(FIRSTNAME);
+        patchedCustomer.setLastname(customerDTO.getLastname());
+        patchedCustomer.setId(ID);
+
+        when(customerRepository.findById(anyLong())).thenReturn(java.util.Optional.ofNullable(originalCustomer));
+        when(customerRepository.save(any(Customer.class))).thenReturn(patchedCustomer);
+
+        //when
+        CustomerDTO savedDTO = customerService.patchCustomer(ID, customerDTO);
+
+        //then
+        assertEquals(customerDTO.getLastname(), patchedCustomer.getLastname());
         assertEquals(CUSTOMER_URL + ID, savedDTO.getCustomerUrl());
     }
 }
