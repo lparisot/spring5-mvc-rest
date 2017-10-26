@@ -78,6 +78,11 @@ public class CustomerServiceImpl implements CustomerService {
                 .orElseThrow(RuntimeException::new);
     }
 
+    @Override
+    public void deleteCustomerById(long id) {
+
+    }
+
     private CustomerDTO saveCustomerAndReturnDTO(Customer customer) {
         Customer savedCustomer = customerRepository.save(customer);
 
