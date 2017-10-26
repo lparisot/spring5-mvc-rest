@@ -88,8 +88,8 @@ public class CustomerServiceImplIT {
 
         assertNotNull(updatedCustomer);
         assertEquals(updateName, updatedCustomer.getLastname());
-        assertThat(originalFirstname, not(equalTo(updatedCustomer.getLastname())));
-        assertThat(originalLastname, equalTo(updatedCustomer.getFirstname()));
+        assertThat(originalLastname, not(equalTo(updatedCustomer.getLastname())));
+        assertThat(originalFirstname, equalTo(updatedCustomer.getFirstname()));
     }
 
     private Long getCustomerIdValue() {
