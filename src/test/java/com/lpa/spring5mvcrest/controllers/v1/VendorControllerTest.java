@@ -2,7 +2,9 @@ package com.lpa.spring5mvcrest.controllers.v1;
 
 import com.lpa.spring5mvcrest.api.v1.model.VendorDTO;
 import com.lpa.spring5mvcrest.api.v1.model.VendorListDTO;
+import com.lpa.spring5mvcrest.domain.Vendor;
 import com.lpa.spring5mvcrest.services.VendorService;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -94,14 +97,21 @@ public class VendorControllerTest extends AbstractRestControllerTest {
     @Test
     public void patchVendor() throws Exception {
         //given
-        given(vendorService.saveVendorByDTO(anyLong(), any(VendorDTO.class))).willReturn(vendorDTO1);
+        VendorDTO vendor = new VendorDTO();
+        vendor.setName("Update name");
 
-        //when/then
-        mockMvc.perform(patch(VendorController.BASE_URL + "/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(vendorDTO1)))
+        //when
+        VendorDTO returnDTO = new VendorDTO();
+        returnDTO.setName(vendor.getName());
+        returnDTO.setVendorUrl(VendorController.BASE_URL + "/1");
+
+        when(vendorService.patchVendor(anyLong(), any(VendorDTO.class))).thenReturn(returnDTO);
+
+        //then
+        mockMvc.perform(patch(VendorController.BASE_URL + "/1").contentType(MediaType.APPLICATION_JSON).content(asJsonString(vendor)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", equalTo(vendorDTO1.getName())));
+                .andExpect(jsonPath("$.name", equalTo(vendor.getName())))
+                .andExpect(jsonPath("$.vendor_url", Matchers.equalTo(VendorController.BASE_URL + "/1")));
     }
 
     @Test
