@@ -157,7 +157,7 @@ public class VendorServiceTest {
         Long id = 1L;
         Vendor vendor = getVendor(id);
 
-        when(vendorRepository.findById(anyLong())).thenReturn(java.util.Optional.ofNullable(vendor));
+        given(vendorRepository.findById(anyLong())).willReturn(Optional.of(vendor));
 
         //when
         vendorService.deleteVendorById(id);
