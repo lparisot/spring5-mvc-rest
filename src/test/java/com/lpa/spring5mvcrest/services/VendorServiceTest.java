@@ -23,6 +23,8 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class VendorServiceTest {
     public static final String NAME = "Vendor ";
@@ -151,10 +153,21 @@ public class VendorServiceTest {
 
     @Test
     public void deleteVendorById() throws Exception {
+        //given
+        Long id = 1L;
+        Vendor vendor = getVendor(id);
+
+        when(vendorRepository.findById(anyLong())).thenReturn(java.util.Optional.ofNullable(vendor));
+
         //when
-        vendorService.deleteVendorById(1L);
+        vendorService.deleteVendorById(id);
 
         //then
-        then(vendorRepository).should().deleteById(anyLong());
+        verify(vendorRepository, times(1)).deleteById(anyLong());
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void deleteVendorByIdNotFound() throws Exception {
+        vendorService.deleteVendorById(1L);
     }
 }
